@@ -95,7 +95,7 @@ def init_messages():
     base_time = int(time.time()) - 3600  # Set the message timestamp to be 1 hour ago
 
     sql =  '''INSERT INTO Message VALUES 
-                (NULL, 'This is the first message in TestRoom1, sent by TestUser1. It has an attachment (a picture of Donald Trump).', 1, 1, ?),
+                (NULL, 'This is the first message in TestRoom1, sent by TestUser1. It has two attachments (a picture of Donald Trump and another of Gary Barlow).', 1, 1, ?),
                 (NULL, 'This is the second message in TestRoom1, sent by TestUser2.', 1, 2, ?),
                 (NULL, 'This is the third message in TestRoom1, sent by TestUser3.', 1, 3, ?),
                 (NULL, 'This is the fourth message in TestRoom1, sent by TestUser1.', 1, 1, ?),
@@ -137,18 +137,50 @@ def init_attachments():
 
     sql = '''INSERT INTO Attachment VALUES 
             (NULL, 1, 'donald.png'),
+            (NULL, 1, 'gary.png'),
             (NULL, 12, 'will.png'),
             (NULL, 14, 'jen.png'),
             (NULL, 15, 'gary.png')
+            
         '''
 
     c.execute(sql)
 
+def test_messages():
+
+    for x in range(1,22):
+        m = chatterDB.Message(x, DB)
+        print(m)
+        for attachment in m.attachments:
+            print(attachment)
+
+    m.delete()
+    print(m)
+
+    new_message = chatterDB.Message.create("This is a new message", 1, 1, DB)
+
+    print(new_message)
+
+def test_chatrooms():
+    cr = chatterDB.Chatroom(1, DB)
+    u = chatterDB.User(1, DB)
+
+    print("Members")
+    for member in cr.members:
+        print(member)
+
+    print("Owners")
+    for owner in cr.owners:
+        print(owner)
+
+    print(cr)
+
+    for message in cr.messages:
+        print(message)
+
+    pass
 
 if __name__ == "__main__":
     init_db()
-    u = chatterDB.User.login('TestUser1', 'test1', DB)
-    print(u)
-
-    new = chatterDB.User.create('adam', 'letmeinnowplease', DB)
-    print(new)
+    test_messages()
+    test_chatrooms()
