@@ -40,6 +40,7 @@ def init_users():
                     (NULL,'TestAdmin','testadmin',0,1,1)        
         '''
     c.execute(sql)
+    DB.commit()
 
 
 def init_chatrooms():
